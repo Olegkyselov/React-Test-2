@@ -50,6 +50,7 @@ module.exports = {
   resolve: {
     alias: {
       '#components': resolve(__dirname, `./src/components`),
+      '#root': resolve(__dirname, `./`)
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },

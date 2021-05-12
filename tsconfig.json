@@ -6,7 +6,8 @@
     "types": ["jest"],
     "paths": {
       "#components/*": ["src/components/*"],
-      "#storybook/*": [".storybook/*"]
+      "#storybook/*": [".storybook/*"],
+      "#root/*": ["./*"]
     }
   },
   "exclude": ["cypress/", "src/**/*.component.tests.tsx"]
