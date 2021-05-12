@@ -1,89 +1,61 @@
 import * as React from 'react';
 
-import { InfoTabs } from './components/InfoTabs'
-import { creatinineClearance } from '#root/src/texts/advice'
+import xml2js from 'xml2js';
+import * as moment from 'moment';
+
+import { InfoTabs } from './components/InfoTabs';
+import { CreatinineClearanceForm } from './components/CreatinineClearanceForm';
+import { creatinineClearance } from '#root/src/texts/advice';
 
 import './styles.css';
+import { capitalizeFirstLetter } from '#root/src/utils/capitalizeFirstLetter';
 
 export const Application = () => {
+  const [prefilledValues, setPrefilledValues] = React.useState(null);
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const [patientMainInfo, weightObservations, heightObservations] = await Promise.all(
+        await Promise.all(
+          await Promise.all([
+            fetch('https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB'),
+            fetch(
+              'https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Observation?patient=Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB&code=29463-7'
+            ),
+            fetch(
+              'https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Observation?patient=Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB&code=8302-2'
+            ),
+          ]).then((requests) => requests.map((request) => request.text()))
+        ).then((requestsText) => requestsText.map((requestText) => xml2js.parseStringPromise(requestText)))
+      );
+
+      const dob = patientMainInfo.Patient.birthDate[0].$.value;
+      const sex = patientMainInfo.Patient.gender[0].$.value;
+      const weightKg = weightObservations.Bundle.entry[0].resource[0].Observation[0].valueQuantity[0].value[0].$.value;
+      const heightSm = heightObservations.Bundle.entry[0].resource[0].Observation[0].valueQuantity[0].value[0].$.value;
+
+      setPrefilledValues({
+        age: String(moment().diff(moment(dob, 'YYYY-MM-DD'), 'years')),
+        sex: capitalizeFirstLetter(sex),
+        weight: weightKg,
+        heigh: heightSm,
+      });
+    }
+
+    fetchData();
+  }, []);
+
+  const handleCreatinineClearanceFormSubmit = React.useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    debugger;
+    return;
+  }, []);
+
   return (
-    <>
-      <div className="container">
-        {<InfoTabs advice={creatinineClearance} />}
-        <form>
-          <hr />
-          <div className="form-group row">
-            <label className="col-sm-3 col-md-6 col-form-label">Sex</label>
-            <div className="input-group input-group-lg col-sm-9 col-md-6">
-              <div className="btn-group btn-group-lg btn-group-toggle w-100" data-toggle="buttons">
-                <label className="btn btn-info active">
-                  <input type="radio" name="sex" id="female" checked /> Female
-                </label>
-                <label className="btn btn-light">
-                  <input type="radio" name="sex" id="male" /> Male
-                </label>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="form-group row">
-            <label htmlFor="age" className="col-sm-3 col-md-6 col-form-label">
-              Age
-            </label>
-            <div className="input-group input-group-lg col-sm-9 col-md-6">
-              <input type="number" className="form-control" id="age" />
-              <div className="input-group-append">
-                <span className="input-group-text">years</span>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="form-group row">
-            <label htmlFor="weight" className="col-sm-3 col-md-6 col-form-label">
-              Weight
-            </label>
-            <div className="input-group input-group-lg col-sm-9 col-md-6 ">
-              <input type="text" className="form-control" id="weight" />
-              <div className="input-group-append">
-                <span className="input-group-text">kg</span>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="form-group row">
-            <label htmlFor="creatinine" className="col-sm-3 col-md-6 col-form-label">
-              Creatinine
-            </label>
-            <div className="input-group input-group-lg col-sm-9 col-md-6 ">
-              <input type="text" className="form-control" id="creatinine" />
-              <div className="input-group-append">
-                <span className="input-group-text">mg/dL</span>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="form-group row">
-            <label htmlFor="height" className="col-sm-3 col-md-6 col-form-label">
-              Height
-            </label>
-            <div className="input-group input-group-lg col-sm-9 col-md-6">
-              <input type="text" className="form-control" id="height" />
-              <div className="input-group-append">
-                <span className="input-group-text">cm</span>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="row justify-content-center">
-            <div className="col-sm-12 col-md-6">
-              <button type="submit" className="btn btn-info btn-lg btn-primary w-100">
-                Calculate
-              </button>
-            </div>
-          </div>
-        </form>
-        <p>results: score 5, low</p>
-      </div>
-    </>
+    <div className="container">
+      <InfoTabs advice={creatinineClearance} />
+      <CreatinineClearanceForm data={prefilledValues} onSubmit={handleCreatinineClearanceFormSubmit} />
+      <p>results: score 5, low</p>
+    </div>
   );
 };

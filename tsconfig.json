@@ -1,6 +1,7 @@
 {
   "sourceMap": true,
   "compilerOptions": {
+    "lib": ["ES2015", "ESNext", "DOM"],
     "jsx": "react",
     "baseUrl": "./",
     "types": ["jest"],
