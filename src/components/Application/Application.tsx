@@ -46,9 +46,7 @@ export const Application = () => {
   }, []);
 
   const handleCreatinineClearanceFormSubmit = React.useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    debugger;
-    return;
+    console.dir(e)
   }, []);
 
   return (
