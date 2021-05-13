@@ -1,0 +1,1 @@
+export { CreatinineClearanceResult } from './CreatinineClearanceResult';

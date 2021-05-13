@@ -1,4 +1,4 @@
-export interface CreatinineClearanceCalculation {
+export interface CreatinineClearanceCalculationData {
   sex: 'Female' | 'Male';
   age: number;
   weight: number;

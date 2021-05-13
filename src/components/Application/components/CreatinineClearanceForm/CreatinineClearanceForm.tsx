@@ -38,14 +38,7 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
         <div className="input-group input-group-lg col-sm-9 col-md-6">
           <div className="btn-group btn-group-lg btn-group-toggle w-100" data-toggle="buttons">
             <label className={classNames('btn', isFemaleGender ? 'active btn-info' : 'btn-light')}>
-              <input
-                disabled={!props.data}
-                type="radio"
-                name="sex"
-                id="female"
-                value="Female"
-                {...register('sex')}
-              />
+              <input disabled={!props.data} type="radio" name="sex" id="female" value="Female" {...register('sex')} />
               Female
             </label>
             <label className={classNames('btn', isMaleGender ? 'active btn-info' : 'btn-light')}>

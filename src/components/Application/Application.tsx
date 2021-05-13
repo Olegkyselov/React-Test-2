@@ -1,15 +1,15 @@
 import * as React from 'react';
-
 import xml2js from 'xml2js';
 import * as moment from 'moment';
 
 import { InfoTabs } from './components/InfoTabs';
 import { CreatinineClearanceForm } from './components/CreatinineClearanceForm';
 import { creatinineClearance } from '#root/src/texts/advice';
-import { capitalizeFirstLetter } from '#root/src/utils/capitalizeFirstLetter';
-import { CreatinineClearanceCalculation } from '#root/src/interfaces/CreatinineClearanceCalculation';
+import { capitalizeFirstLetter, calculateCreatinineClearance } from '#root/src/utils';
+import { CreatinineClearanceCalculationData } from '#root/src/interfaces/CreatinineClearanceCalculationData';
 
 import './styles.css';
+import { CreatinineClearanceResult } from './components/CreatinineClearanceResult';
 
 export const Application = () => {
   const [prefilledValues, setPrefilledValues] = React.useState(null);
@@ -48,7 +48,7 @@ export const Application = () => {
   }, []);
 
   const handleCreatinineClearanceFormSubmit = React.useCallback((formData) => {
-    const parsedFormData: CreatinineClearanceCalculation = {
+    const parsedFormData: CreatinineClearanceCalculationData = {
       sex: formData.sex,
       age: parseInt(formData.age, 10),
       weight: parseFloat(formData.weight),
@@ -56,33 +56,14 @@ export const Application = () => {
       creatinine: parseFloat(formData.creatinine),
     };
 
-    let score = 0;
-    if (parsedFormData.sex === 'Male') {
-      score += 1;
-    }
-    if (parsedFormData.age > 40) {
-      score += 1;
-    }
-    if (parsedFormData.weight > 60) {
-      score += 1;
-    }
-    if (parsedFormData.creatinine > 0.7) {
-      score += 1;
-    }
-    if (parsedFormData.height > 160) {
-      score += 1;
-    }
-
-    const severity = score > 3 ? 'hight' : 'low';
-
-    setCalcaulationResults(`result: score ${score}, ${severity} `);
+    setCalcaulationResults(calculateCreatinineClearance(parsedFormData));
   }, []);
 
   return (
     <div className="container">
       <InfoTabs advice={creatinineClearance} />
       <CreatinineClearanceForm data={prefilledValues} onSubmit={handleCreatinineClearanceFormSubmit} />
-      {calcaulationResults ? <p>{calcaulationResults}</p> : null}
+      {calcaulationResults ? <CreatinineClearanceResult {...calcaulationResults} /> : null}
     </div>
   );
 };
