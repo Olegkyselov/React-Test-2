@@ -102,7 +102,7 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
             step="any"
             className={classNames('form-control', { 'is-invalid': formState.errors?.creatinine })}
             id="creatinine"
-            {...register('creatinine', { min: 1 })}
+            {...register('creatinine', { min: 0 })}
           />
           <div className="input-group-append">
             <span className="input-group-text">mg/dL</span>
