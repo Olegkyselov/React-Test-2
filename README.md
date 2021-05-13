@@ -6,7 +6,7 @@ A react test task.
 ```
 npm run start
 ```
-* Run Storybook (basically it just renders an Application, not a separate components)
+* Run Storybook (basically it just renders an Application, not separate components)
 ```
 npm run storybook
 ```
@@ -19,3 +19,10 @@ npm run test:unit
 npm run start
 npm run test:e2e:browser
 ```
+
+# CSP
+Automatic upgrade from http to https made by meta-tag:
+```
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+```
+> Notice that all fetch requests in "src/api/fetchData.ts" intentionally mentioned as http.
