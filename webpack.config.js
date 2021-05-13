@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './src/main.tsx',
   output: {
-    path: resolve('./dist/app')
+    path: resolve('./dist/app'),
   },
   module: {
     rules: [
@@ -26,7 +26,11 @@ module.exports = {
             '@babel/react',
             '@babel/preset-typescript',
           ],
-          plugins: ['@babel/proposal-class-properties', '@babel/proposal-object-rest-spread'],
+          plugins: [
+            '@babel/proposal-class-properties',
+            '@babel/proposal-object-rest-spread',
+            '@babel/plugin-proposal-optional-chaining',
+          ],
         },
       },
       {
@@ -40,7 +44,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name]-[hash].[ext]',
-              outputPath: 'images'
+              outputPath: 'images',
             },
           },
         ],
@@ -50,7 +54,7 @@ module.exports = {
   resolve: {
     alias: {
       '#components': resolve(__dirname, `./src/components`),
-      '#root': resolve(__dirname, `./`)
+      '#root': resolve(__dirname, `./`),
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },

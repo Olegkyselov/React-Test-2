@@ -1,11 +1,14 @@
-import { FormEvent } from 'react';
-
 export interface CreatinineClearanceFormProps {
-  data: {
-    sex: 'Female' | 'Male' | unknown;
-    age: string | unknown;
-    weight: string | unknown;
-    height: string | unknown;
+  data?: {
+    sex: 'Female' | 'Male';
+    age: string;
+    weight: string;
+    height: string;
   };
-  onSubmit: (FormEvent) => void;
+  onSubmit: (formData : {
+      sex: 'Female' | 'Male';
+      age: string;
+      weight: string;
+      height: string;
+  }) => void;
 }

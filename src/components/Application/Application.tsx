@@ -6,12 +6,14 @@ import * as moment from 'moment';
 import { InfoTabs } from './components/InfoTabs';
 import { CreatinineClearanceForm } from './components/CreatinineClearanceForm';
 import { creatinineClearance } from '#root/src/texts/advice';
+import { capitalizeFirstLetter } from '#root/src/utils/capitalizeFirstLetter';
+import { CreatinineClearanceCalculation } from '#root/src/interfaces/CreatinineClearanceCalculation';
 
 import './styles.css';
-import { capitalizeFirstLetter } from '#root/src/utils/capitalizeFirstLetter';
 
 export const Application = () => {
   const [prefilledValues, setPrefilledValues] = React.useState(null);
+  const [calcaulationResults, setCalcaulationResults] = React.useState(null);
 
   React.useEffect(() => {
     async function fetchData() {
@@ -38,22 +40,49 @@ export const Application = () => {
         age: String(moment().diff(moment(dob, 'YYYY-MM-DD'), 'years')),
         sex: capitalizeFirstLetter(sex),
         weight: weightKg,
-        heigh: heightSm,
+        height: heightSm,
       });
     }
 
     fetchData();
   }, []);
 
-  const handleCreatinineClearanceFormSubmit = React.useCallback((e: React.FormEvent) => {
-    console.dir(e)
+  const handleCreatinineClearanceFormSubmit = React.useCallback((formData) => {
+    const parsedFormData: CreatinineClearanceCalculation = {
+      sex: formData.sex,
+      age: parseInt(formData.age, 10),
+      weight: parseFloat(formData.weight),
+      height: parseFloat(formData.height),
+      creatinine: parseFloat(formData.creatinine),
+    };
+
+    let score = 0;
+    if (parsedFormData.sex === 'Male') {
+      score += 1;
+    }
+    if (parsedFormData.age > 40) {
+      score += 1;
+    }
+    if (parsedFormData.weight > 60) {
+      score += 1;
+    }
+    if (parsedFormData.creatinine > 0.7) {
+      score += 1;
+    }
+    if (parsedFormData.height > 160) {
+      score += 1;
+    }
+
+    const severity = score > 3 ? 'hight' : 'low';
+
+    setCalcaulationResults(`result: score ${score}, ${severity} `);
   }, []);
 
   return (
     <div className="container">
       <InfoTabs advice={creatinineClearance} />
       <CreatinineClearanceForm data={prefilledValues} onSubmit={handleCreatinineClearanceFormSubmit} />
-      <p>results: score 5, low</p>
+      {calcaulationResults ? <p>{calcaulationResults}</p> : null}
     </div>
   );
 };

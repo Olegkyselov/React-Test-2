@@ -1,15 +1,34 @@
+import classNames from 'classnames';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { CreatinineClearanceFormProps } from './interfaces';
 
 export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState, reset, watch } = useForm({
+    defaultValues: {
+      age: props.data?.age,
+      sex: props.data?.sex,
+      weight: props.data?.weight,
+      height: props.data?.height,
+      creatinine: null,
+    },
+  });
+
+  // required cause defaultValues updates after data fetching
+  React.useEffect(() => {
+    reset({
+      age: props.data?.age,
+      sex: props.data?.sex,
+      weight: props.data?.weight,
+      height: props.data?.height,
+      creatinine: null,
+    });
+  }, [props.data]);
+
+  const sexChosen = watch('sex');
+  const isFemaleGender = sexChosen === 'Female';
+  const isMaleGender = sexChosen === 'Male';
 
   return (
     <form onSubmit={handleSubmit(props.onSubmit)}>
@@ -18,12 +37,20 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
         <label className="col-sm-3 col-md-6 col-form-label">Sex</label>
         <div className="input-group input-group-lg col-sm-9 col-md-6">
           <div className="btn-group btn-group-lg btn-group-toggle w-100" data-toggle="buttons">
-            <label className="btn btn-info active">
-              <input disabled={!props.data} type="radio" name="sex" id="female" value="Female" {...register('sex')} />{' '}
+            <label className={classNames('btn', isFemaleGender ? 'active btn-info' : 'btn-light')}>
+              <input
+                disabled={!props.data}
+                type="radio"
+                name="sex"
+                id="female"
+                value="Female"
+                {...register('sex')}
+              />
               Female
             </label>
-            <label className="btn btn-light">
-              <input disabled={!props.data} type="radio" name="sex" id="male" value="Male" {...register('sex')} /> Male
+            <label className={classNames('btn', isMaleGender ? 'active btn-info' : 'btn-light')}>
+              <input disabled={!props.data} type="radio" name="sex" id="male" value="Male" {...register('sex')} />
+              Male
             </label>
           </div>
         </div>
@@ -34,10 +61,20 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
           Age
         </label>
         <div className="input-group input-group-lg col-sm-9 col-md-6">
-          <input disabled={!props.data} type="number" className="form-control" id="age" {...register('age')} />
+          <input
+            required
+            disabled={!props.data}
+            type="number"
+            className={classNames('form-control', { 'is-invalid': formState.errors?.weight })}
+            id="age"
+            {...register('age', {
+              min: 1,
+            })}
+          />
           <div className="input-group-append">
             <span className="input-group-text">years</span>
           </div>
+          <div className="invalid-feedback">{formState.errors?.age ? 'Please enter the correct age' : null}</div>
         </div>
       </div>
       <hr />
@@ -46,10 +83,20 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
           Weight
         </label>
         <div className="input-group input-group-lg col-sm-9 col-md-6 ">
-          <input disabled={!props.data} type="text" className="form-control" id="weight" {...register('weight')} />
+          <input
+            required
+            disabled={!props.data}
+            type="text"
+            className={classNames('form-control', { 'is-invalid': formState.errors?.weight })}
+            id="weight"
+            {...register('weight', {
+              min: 1,
+            })}
+          />
           <div className="input-group-append">
             <span className="input-group-text">kg</span>
           </div>
+          <div className="invalid-feedback">{formState.errors?.weight ? 'Please enter the correct weight' : null}</div>
         </div>
       </div>
       <hr />
@@ -59,14 +106,20 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
         </label>
         <div className="input-group input-group-lg col-sm-9 col-md-6 ">
           <input
+            required
             disabled={!props.data}
             type="text"
-            className="form-control"
+            className={classNames('form-control', { 'is-invalid': formState.errors?.creatinine })}
             id="creatinine"
-            {...register('creatinine')}
+            {...register('creatinine', {
+              min: 1,
+            })}
           />
           <div className="input-group-append">
             <span className="input-group-text">mg/dL</span>
+          </div>
+          <div className="invalid-feedback">
+            {formState.errors?.creatinine ? 'Please enter the correct value' : null}
           </div>
         </div>
       </div>
@@ -76,10 +129,20 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
           Height
         </label>
         <div className="input-group input-group-lg col-sm-9 col-md-6">
-          <input disabled={!props.data} type="text" className="form-control" id="height"  {...register('height')} />
+          <input
+            required
+            disabled={!props.data}
+            type="text"
+            className={classNames('form-control', { 'is-invalid': formState.errors?.height })}
+            id="height"
+            {...register('height', {
+              min: 1,
+            })}
+          />
           <div className="input-group-append">
             <span className="input-group-text">cm</span>
           </div>
+          <div className="invalid-feedback">{formState.errors?.height ? 'Please enter the correct height' : null}</div>
         </div>
       </div>
       <hr />

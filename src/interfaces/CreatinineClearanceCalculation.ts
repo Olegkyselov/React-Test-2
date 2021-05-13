@@ -1,7 +1,7 @@
 export interface CreatinineClearanceCalculation {
-  sex: 'Female' | 'Male' | unknown;
-  age: number | unknown;
-  weight: number | unknown;
-  creatinine: number | unknown;
-  height: number | unknown;
+  sex: 'Female' | 'Male';
+  age: number;
+  weight: number;
+  creatinine: number;
+  height: number;
 }
