@@ -27,9 +27,9 @@ export const Application = () => {
     const parsedFormData: CreatinineClearanceCalculationData = {
       sex: formData.sex,
       age: parseInt(formData.age, 10),
-      weight: parseFloat(formData.weight),
-      height: parseFloat(formData.height),
-      creatinine: parseFloat(formData.creatinine),
+      weight: parseFloat(formData.weight.replace(',', '.')),
+      height: parseFloat(formData.height.replace(',', '.')),
+      creatinine: parseFloat(formData.creatinine.replace(',', '.')),
     };
 
     setCalcaulationResults(calculateCreatinineClearance(parsedFormData));

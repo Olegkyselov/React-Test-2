@@ -60,9 +60,7 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
             type="number"
             className={classNames('form-control', { 'is-invalid': formState.errors?.weight })}
             id="age"
-            {...register('age', {
-              min: 1,
-            })}
+            {...register('age', { min: 1 })}
           />
           <div className="input-group-append">
             <span className="input-group-text">years</span>
@@ -79,12 +77,11 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
           <input
             required
             disabled={!props.data}
-            type="text"
+            type="number"
+            step="any"
             className={classNames('form-control', { 'is-invalid': formState.errors?.weight })}
             id="weight"
-            {...register('weight', {
-              min: 1,
-            })}
+            {...register('weight', { min: 1 })}
           />
           <div className="input-group-append">
             <span className="input-group-text">kg</span>
@@ -101,12 +98,11 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
           <input
             required
             disabled={!props.data}
-            type="text"
+            type="number"
+            step="any"
             className={classNames('form-control', { 'is-invalid': formState.errors?.creatinine })}
             id="creatinine"
-            {...register('creatinine', {
-              min: 1,
-            })}
+            {...register('creatinine', { min: 1 })}
           />
           <div className="input-group-append">
             <span className="input-group-text">mg/dL</span>
@@ -125,12 +121,11 @@ export function CreatinineClearanceForm(props: CreatinineClearanceFormProps) {
           <input
             required
             disabled={!props.data}
-            type="text"
+            type="number"
+            step="any"
             className={classNames('form-control', { 'is-invalid': formState.errors?.height })}
             id="height"
-            {...register('height', {
-              min: 1,
-            })}
+            {...register('height', { min: 1 })}
           />
           <div className="input-group-append">
             <span className="input-group-text">cm</span>
