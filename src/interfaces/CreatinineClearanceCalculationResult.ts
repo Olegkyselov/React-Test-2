@@ -1,4 +1,4 @@
 export interface CreatinineClearanceCalculationResult {
   score: number,
-  severity: 'low' | 'hight'
+  severity: 'low' | 'high'
 }
